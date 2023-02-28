@@ -9,16 +9,12 @@ socketio = SocketIO(app)
 
 rooms = {}
 
-def generate_unique_code(length):
-    while True:
-        code = ""
-        for _ in range(length):
-            code += random.choice(ascii_uppercase)
-        
+def generate_unique_code(length: int, max_tries: int = 10) -> str:
+    for _ in range(max_tries):
+        code = "".join(random.choices(ascii_uppercase, k=length))
         if code not in rooms:
-            break
-    
-    return code
+            return code
+    raise Exception("Could not generate a unique code.")
 
 @app.route("/", methods=["POST", "GET"])
 def home():
